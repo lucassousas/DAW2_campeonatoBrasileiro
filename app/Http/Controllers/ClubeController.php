@@ -13,7 +13,7 @@ class ClubeController extends Controller
      */
     public function index()
     {
-        //
+        return view("clube.index");
     }
 
     /**

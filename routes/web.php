@@ -23,5 +23,5 @@ Route::Resources([
 ]);
 
 Route::get('/', function () {
-    return view('Bem Vindo!');
+    return view('welcome');
 });
