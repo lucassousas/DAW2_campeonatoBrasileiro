@@ -1,6 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PosicaoJogadorController;
+use App\Http\Controllers\ClubeController;
+use App\Http\Controllers\JogadorController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,7 +16,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-
+Route::Resources([
+    "posicaoJogador" => PosicaoJogadorController::class,
+    "clube" => ClubeController::class,
+    "jogador" => JogadorController::class
+]);
 
 Route::get('/', function () {
     return view('Bem Vindo!');
