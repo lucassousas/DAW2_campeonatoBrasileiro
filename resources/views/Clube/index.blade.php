@@ -6,16 +6,18 @@
 		<title>Cadastro de Clubes</title>
 	</head>
 	<body>
-		<form method="POST">
+		<form method="POST" action="/clube">
 			<div>
 				<label>Nome: </label>
-				<input type="text" name="nome" />
+				<input type="text" name="nome" value="{{ $clube->nome }}" />
 			</div>
 			<div>
 				<label>Escudo: </label>
-				<input type="file" name="escudo" />
+				<input type="file" name="escudo" value="{{ $clube->escudo }}" />
 			</div>
 			<div>
+				@csrf
+				<input type="hidden" name="id">
 				<button type="submit">Salvar</button>
 				<a href="/clube">Novo</a>
 			</div>
@@ -30,12 +32,22 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
-				</tr>
+				@foreach ($clubes as $clube)
+					<tr>
+						<td>{{ $clube->nome }}</td>
+						<td></td>
+						<td>
+							<a href="/clube/{{ $clube->id }}/edit">Editar</a>
+						</td>
+						<td>
+							<form method="POST" action="/clube/{{ $clube->id }}">
+								@csrf
+								<input type="hidden" name="_method" value="DELETE" />
+								<button type="submit" onclick="return confirm('Deseja realmente excluir?');">Excluir</button>
+							</form>
+						</td>
+					</tr>
+				@endforeach
 			</tbody>
 		</table>
 	</body>

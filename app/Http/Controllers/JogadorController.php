@@ -3,17 +3,21 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use App\Models\Jogador;
+use App\Models\Clube;
+use App\Models\PosicaoJogador;
 
 class JogadorController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        return view("jogador.index");
+        $jogador = new Jogador();
+        $jogadores = Jogador::All();
+        return view("jogador.index", [
+            "jogador" => $jogador,
+            "jogadores" => $jogadores
+        ]);
     }
 
     /**
@@ -34,7 +38,20 @@ class JogadorController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        if($request->get("id") != ""){
+            $jogador = Jogador::Find($request->get("id"));
+        } else {
+            $jogador = new Jogador();
+        }
+
+        $jogador->nome = $request->get("nome");
+        $jogador->dataNasc = $request->get("dataNasc");
+        $jogador->clube_id = $request->get("clube_id");
+        $jogador->posicao_jogador_id = $request->get("posicao_jogador_id");
+
+        $jogador->save();
+
+        return redirect("/jogador");
     }
 
     /**
@@ -56,7 +73,12 @@ class JogadorController extends Controller
      */
     public function edit($id)
     {
-        //
+        $jogador = Jogador::Find($id);
+        $jogadores = Jogador::All();
+        return view("jogador.index", [
+            "jogador" => $jogador,
+            "jogadores" => $jogadores
+        ]);
     }
 
     /**
@@ -79,6 +101,7 @@ class JogadorController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Jogador::destroy($id);
+        return redirect("/jogador");
     }
 }

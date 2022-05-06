@@ -18,7 +18,7 @@ return new class extends Migration
         Schema::create('jogador', function (Blueprint $table) {
             $table->id();
             $table->string("nome");
-            $table->datetime("dataNasc");
+            $table->string("dataNasc");
             $table->foreignIdFor(Clube::class);
             $table->foreignIdFor(PosicaoJogador::class);
             $table->timestamps();
