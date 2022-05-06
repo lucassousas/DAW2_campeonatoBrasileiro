@@ -8,6 +8,13 @@ use App\Models\PosicaoJogador;
 
 class PosicaoJogadorController extends Controller
 {
+    public function listaPosicaoJogador(){
+        return DB::table("posicao_jogador AS p")
+            ->join("jogador AS j", "p.id", "=", "j.posicao_jogador_id")
+            ->select("p.*", "j.nome AS nome_jogador")
+            ->get();
+    }
+
     public function index()
     {
         $posicao_jogador = new PosicaoJogador();
@@ -18,22 +25,11 @@ class PosicaoJogadorController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         if($request->get("id") != ""){
@@ -47,54 +43,31 @@ class PosicaoJogadorController extends Controller
 
         $posicao_jogador->save();
 
+        $request->session()->flash("status", "salvo");
+
         return redirect("/posicaoJogador");
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
         $posicao_jogador = PosicaoJogador::Find($id);
-        $posicao_jogadores = PosicaoJogador::All();
+        $posicao_jogadores = $this->listaPosicaoJogador();
         return view("posicaoJogador.index", [
             "posicao_jogador" => $posicao_jogador,
             "posicao_jogadores" => $posicao_jogadores
         ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
         PosicaoJogador::destroy($id);

@@ -10,34 +10,50 @@ use App\Models\PosicaoJogador;
 
 class JogadorController extends Controller
 {
+    public function listaJogador()
+    {
+        return DB::table("jogador AS j")
+            ->leftJoin("clube AS c", "j.clube_id", "=", "c.id")
+            ->leftJoin("posicao_jogador AS p", "j.posicao_jogador_id", "=", "p.id")
+            ->select("j.id", "j.nome", DB::raw("COUNT(p.id) AS total_jogadores"))
+            ->groupBy("j.id", "j.nome")
+            ->get();
+    }
+
     public function index()
     {
         $jogador = new Jogador();
-        $jogadores = Jogador::All();
+        $jogadores = $this->listaJogador();
+        $clubes = Clube::All();
+        $posicao_jogadores = PosicaoJogador::All();
         return view("jogador.index", [
             "jogador" => $jogador,
-            "jogadores" => $jogadores
+            "jogadores" => $jogadores,
+            "clubes" => $clubes,
+            "posicao_jogadores" => $posicao_jogadores
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
+        $request->validate([
+            "nome" => "required|max:100",
+            "dataNasc" => "required",
+            "clube" => "required",
+            "posicao" => "required"
+        ], [
+            "nome.required" => "O campo nome é obrigatório",
+            "nome.max" => "O campo nome aceita no máximo :max caracteres",
+            "dataNasc.required" => "O campo data de nascimento é obrigatório",
+            "clube.required" => "O campo escudo é obrigatório",
+            "posicao.required" => "O campo posição do jogador é obrigatório"
+        ]);
+
         if($request->get("id") != ""){
             $jogador = Jogador::Find($request->get("id"));
         } else {
@@ -51,26 +67,16 @@ class JogadorController extends Controller
 
         $jogador->save();
 
+        $request->session()->flash("status", "salvo");
+
         return redirect("/jogador");
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
         $jogador = Jogador::Find($id);
@@ -81,24 +87,11 @@ class JogadorController extends Controller
         ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
         Jogador::destroy($id);

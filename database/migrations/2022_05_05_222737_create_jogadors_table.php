@@ -8,28 +8,20 @@ use App\Models\PosicaoJogador;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
         Schema::create('jogador', function (Blueprint $table) {
             $table->id();
             $table->string("nome");
             $table->string("dataNasc");
+            $table->string("clube");
+            $table->string("posicao_jogador");
             $table->foreignIdFor(Clube::class);
             $table->foreignIdFor(PosicaoJogador::class);
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         Schema::dropIfExists('jogador');

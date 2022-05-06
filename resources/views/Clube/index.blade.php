@@ -3,14 +3,14 @@
 @section("titulo", "Cadastro de Clubes")
 
 @section("formulario")
-	<form method="POST" action="/clube" class="row">
+	<form method="POST" action="/clube" class="row" enctype="multipart form-data">
 		<div class="form-group">
 			<label>Nome: </label>
-			<input type="text" name="nome" value="{{ $clube->nome }}" class="form-control" />
+			<input type="text" name="nome" value="{{ $clube->nome }}" class="form-control" required />
 		</div>
 		<div class="form-group">
 			<label>Escudo: </label>
-			<input type="file" name="escudo" value="{{ $clube->escudo }}" class="form-control" />
+			<input type="file" name="escudo" value="{{ $clube->escudo }}" class="form-control" required />
 		</div>
 		<div class="form-group">
 			@csrf

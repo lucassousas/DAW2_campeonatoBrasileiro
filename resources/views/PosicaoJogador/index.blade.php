@@ -3,7 +3,7 @@
 @section("titulo", "Cadastro de Posições")
 
 @section("formulario")
-	<form method="POST" action="/posicaoJogador" class="row">
+	<form method="POST" action="/posicaoJogador" class="row" enctype="multipart form-data">
 		<div class="form-group">
 			<label>Posição: </label>
 			<input type="text" name="posicao" value="{{ $posicao_jogador->posicao }}" class="form-control" />

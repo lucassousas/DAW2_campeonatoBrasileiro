@@ -6,19 +6,29 @@
 	<form method="POST" action="/jogador" class="row" enctype="multipart/form-data">
 		<div class="form-group">
 			<label>Nome: </label>
-			<input type="text" name="nome" value="{{ $jogador->nome }}" class="form-control" />
+			<input type="text" name="nome" value="{{ $jogador->nome }}" class="form-control" required />
 		</div>
 		<div class="form-group">
 			<label>Data de Nascimento: </label>
-			<input type="date" name="dataNasc" value="{{ $jogador->dataNasc }}" class="form-control" />
+			<input type="date" name="dataNasc" value="{{ $jogador->dataNasc }}" class="form-control" required />
 		</div class="form-group">
 		<div>
 			<label>Clube: </label>
-			
+			<select id="clube_id" name="clube_id" class="form-control" required>
+				<option value=""></option>
+				@foreach ($clubes as $clube) 
+					<option value="{{ $clube->id }}" @if ($clube->id == $jogador->clube_id) selected @endif>{{ $clube->nome }}</option>
+				@endforeach
+			</select>
 		</div>
 		<div class="form-group">
 			<label>Posição: </label>
-
+			<select id="posicao_jogador_id" name="posicao_jogador_id" class="form-control" required>
+				<option value=""></option>
+				@foreach ($posicao_jogadores as $posicao_jogador) 
+					<option value="{{ $posicao_jogador->id }}" @if ($posicao_jogador->id == $jogador->posicao_jogador_id) selected @endif>{{ $posicao_jogador->posicao }}</option>
+				@endforeach
+			</select>
 		</div>
 		<div class="form-group">
 			@csrf
@@ -51,7 +61,13 @@
 			<tbody>
 				<tr>
 					<td>{{ $jogador->nome }}</td>
-					<td></td>
+					<td>
+						@foreach ($clubes as $clube)
+							@if($clube->id == $jogador->clube_id)
+								{{ $clube->nome }}
+							@endif
+						@endforeach
+					</td>
 					<td></td>
 					<td>
 						<a href="/jogador/{{ $jogador->id }}/edit" class="btn btn-warning">Editar</a>
